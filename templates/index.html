@@ -1,0 +1,31 @@
+{%  extends "base.html" %}
+{% block content %}
+            <div class = "row">
+            <div class = "col-md-8 col-md-offset-2">
+                <p><a href="/addbook" class = "btn btn-primary">添加图书</a></p>
+                <table class = "table table-bordered table-hover">
+            <tr>
+                <td>序号</td>
+                <td>名称</td>
+                <td>价格</td>
+                <td>出版日期</td>
+                <td>出版社</td>
+                <td>作者</td>
+            </tr>
+                    {% for book in books %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.price }}</td>
+                    <td>{{ book.publishDate | date:"Y/m/d"}}</td>
+                    <td>{{book.publish.name}}</td>
+                    <td>
+                        {%  for author in book.authors.all %}
+                            <button>{{ author.name }}</button>
+                            {% endfor %}
+                    </td>
+                </tr>
+                    
+                {% endfor %}
+                    
+{% endblock %}
