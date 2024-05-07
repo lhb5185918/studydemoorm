@@ -24,8 +24,17 @@
                             <button>{{ author.name }}</button>
                             {% endfor %}
                     </td>
+                    <td>
+                        <a href = "/editpage/{{ book.id }}" name = "edit_id">编辑</a>
+                    </td>
+                    <td>
+                        <a href = "/deletebook/{{ book.id }}" name ="delete_id">删除</a>
+                    </td>
                 </tr>
                     
                 {% endfor %}
+                </table>
+            </div>
+        </div>
                     
 {% endblock %}

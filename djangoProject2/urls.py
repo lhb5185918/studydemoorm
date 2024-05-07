@@ -15,12 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path,re_path
 from booktest import views
+from ajaxApp import views as v2
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('add/',views.add),
     path('index/',views.index),
     path('addbook/',views.addbook),
+    re_path('deletebook/(\d+)',views.deletebook),
+    re_path('editpage/(\d+)',views.editpage),
+    path('register/',v2.register),
+    path("ajax_register/",v2.ajax_register),
 
 ]

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input id="i1" type ="text" onblur="foo()">
+<span class = "error"></span>
+<script>
+    function foo(){
+        //发送ajax请求
+        $.ajax({
+            url:"/ajax_register/",
+            type:"post",
+            data:{
+                user:$("#i1").val()
+            },
+            success:function(res){
+                //json字符串反序列化
+                //var data = JSON.parse(res);
+                var data = res;
+                if (data.status){
+                    //边框变红
+                    $("#i1").css("border","1px solid red")
+                    //返回错误信息
+                    $(".error").html(data.msg)
+
+                }
+            }
+        })
+    }
+</script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.js"></script>
+</body>
+</html>

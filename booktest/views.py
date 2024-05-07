@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.shortcuts import HttpResponse
+from django.shortcuts import HttpResponse,redirect
 from booktest.models import Book,Publish,Author,AuthorDetail
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -56,6 +56,50 @@ def index(request):
 
 @csrf_exempt
 def addbook(request):
-    publish_list = Publish.objects.all()
-    author_list = Author.objects.all()
-    return render(request,"addbook.html",{"publishes":publish_list,"authors":author_list})
+    if request.method == 'GET':
+        publish_list = Publish.objects.all()
+        author_list = Author.objects.all()
+        return render(request,"addbook.html",{"publishes":publish_list,"authors":author_list})
+    else:
+        print(request.POST)
+        # title = request.POST.get("title")
+        # price = request.POST.get("price")
+        # pubDate = request.POST.get("pubDate")
+        # publish_id= request.POST.get("publish_id")
+        # authors = request.POST.getlist("author_id")
+        data  = request.POST.dict()
+        data.pop("author_id")
+        print(data)
+        authors = request.POST.getlist("author_id")
+        book = Book.objects.create(**data)
+        #绑定多对多关系
+        book.authors.add(*authors)
+
+        return redirect("/index/")
+
+@csrf_exempt
+def deletebook(request,detele_id):
+    if request.method == "GET":
+        return render(request,"deletebook.html")
+    else:
+        Book.objects.get(id = detele_id).delete()
+        return redirect("/index/")
+
+@csrf_exempt
+def editpage(request,edit_id):
+    if request.method =="GET":
+        book = Book.objects.get(id=edit_id)
+        print(book.title)
+        print(book.publishDate)
+        publish_list = Publish.objects.all()
+        author_list = Author.objects.all()
+        return render(request,"editpage.html",{"editbook": book,"publishes":publish_list,"authors":author_list})
+    else:
+        data = request.POST.dict()
+        data.pop("author_id")
+        print(data)
+        authors = request.POST.getlist("author_id")
+        book = (Book.objects.all().filter(id = edit_id).update(**data))
+        bookid = Book.objects.get(id = edit_id)
+        bookid.authors.set([*authors])
+        return redirect("/index/")
